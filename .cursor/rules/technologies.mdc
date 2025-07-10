@@ -1,0 +1,17 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+## 🧰 Technologies Used
+
+- **NestJS** (Modular and opinionated backend framework)
+- **MongoDB** with **Mongoose** (Flexible document storage)
+- **TypeScript**
+- **JWT Authentication** (Access + Refresh token)
+- **Stripe** (Payment processing)
+- **Class Validator / Class Transformer**
+- **Dotenv** (Environment variable management)
+- **Nodemailer / Resend** (for email notifications, optional)
+- **Helmet** (Security headers)
+- **CORS, Rate Limiting, Guards, and Pipes**

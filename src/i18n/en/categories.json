@@ -1,0 +1,26 @@
+{
+  "system": {
+    "concert": "Concert",
+    "theater": "Theater",
+    "sport": "Sport",
+    "conference": "Conference",
+    "festival": "Festival",
+    "workshop": "Workshop",
+    "exhibition": "Exhibition",
+    "seminar": "Seminar"
+  },
+  "messages": {
+    "created": "Category created successfully",
+    "updated": "Category updated successfully",
+    "deleted": "Category deleted successfully",
+    "retrieved": "Category retrieved successfully",
+    "systemRetrieved": "System categories retrieved successfully",
+    "availableRetrieved": "Available categories retrieved successfully",
+    "searchCompleted": "Category search completed"
+  },
+  "errors": {
+    "categoryNotFound": "Category not found",
+    "categoryAlreadyExists": "Category with this name already exists",
+    "systemCategoryCannotBeModified": "System categories cannot be modified"
+  }
+}

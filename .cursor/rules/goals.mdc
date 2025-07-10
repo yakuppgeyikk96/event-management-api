@@ -1,0 +1,12 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+## 🎯 Project Goals
+
+- Provide a secure REST API for authentication, event creation, and ticketing.
+- Ensure role-based access control for users and organizers.
+- Integrate Stripe for ticket purchases and webhook validation.
+- Support scalability with clean architecture and MongoDB schemas.
+- Provide data validation and sanitization on all request payloads.

@@ -1,0 +1,14 @@
+{
+  "messages": {
+    "userCreated": "Kullanıcı başarıyla oluşturuldu",
+    "userUpdated": "Kullanıcı başarıyla güncellendi",
+    "userDeleted": "Kullanıcı başarıyla silindi",
+    "usersRetrieved": "Kullanıcılar başarıyla getirildi",
+    "userRetrieved": "Kullanıcı başarıyla getirildi"
+  },
+  "errors": {
+    "userNotFound": "Kullanıcı bulunamadı",
+    "emailAlreadyExists": "Bu email adresi zaten kullanımda",
+    "invalidUserId": "Geçersiz kullanıcı ID'si"
+  }
+}

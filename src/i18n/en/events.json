@@ -1,0 +1,21 @@
+{
+  "messages": {
+    "created": "Event created successfully",
+    "updated": "Event updated successfully",
+    "deleted": "Event deleted successfully",
+    "retrieved": "Event retrieved successfully",
+    "publicEventsRetrieved": "Public events retrieved successfully",
+    "featuredEventsRetrieved": "Featured events retrieved successfully",
+    "organizerEventsRetrieved": "Organizer events retrieved successfully",
+    "searchCompleted": "Event search completed",
+    "organizerSearchCompleted": "Organizer event search completed",
+    "statusUpdated": "Event status updated successfully"
+  },
+  "errors": {
+    "eventNotFound": "Event not found",
+    "endDateMustBeAfterStartDate": "End date must be after start date",
+    "startDateMustBeInFuture": "Start date must be in the future",
+    "cannotChangeCompletedEvent": "Cannot change status of completed event",
+    "cannotChangeCancelledEvent": "Cannot change status of cancelled event"
+  }
+}

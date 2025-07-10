@@ -1,0 +1,10 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 🎟️ event-management Backend
+
+This is the backend API for **event-management**, a ticketing platform where users can browse and purchase tickets, and organizers can publish and manage events.
+
+Built with **NestJS** and **MongoDB**, it provides a secure, modular, and scalable REST API architecture.

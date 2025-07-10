@@ -1,0 +1,58 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+## 🧼 Clean Code & Architecture Principles
+
+### ✅ General Best Practices
+
+- Use **TypeScript strict mode**.
+- Split app into clearly defined **modules** (e.g., `auth`, `events`, `tickets`, `users`).
+- Follow **SOLID principles** in services and controllers.
+- Keep **DTOs** and **interfaces** separate and reusable.
+
+### 🧩 Dependency Management
+
+- Use **dependency injection** (NestJS default).
+- Keep services lean; extract logic to helpers when needed.
+- Avoid deeply nested service-to-service calls.
+
+### 🧪 Validation & Error Handling
+
+- Validate all input using **class-validator** in DTOs.
+- Use **global exception filter** for standardized error responses.
+- Log errors with useful stack traces but avoid exposing sensitive data.
+
+### 🛡 Security
+
+- Use **bcrypt** for password hashing.
+- Store secrets using `.env` and access via `ConfigModule`.
+- Implement **rate-limiting** and enable **Helmet**.
+- Sanitize user inputs to prevent NoSQL injection.
+
+### 🔐 Auth & Authorization
+
+- Use **JWT** for stateless authentication.
+- Implement **refresh tokens** with expiration logic.
+- Use **Guards** to protect routes (e.g., `@Roles('organizer')`).
+
+---
+
+## ⚡️ Performance Optimization Guidelines
+
+- Use **lean queries** in Mongoose for fast reads.
+- Avoid over-fetching nested documents.
+- Index commonly queried fields (e.g., `slug`, `userId`, `eventId`).
+- Use pagination for large datasets (e.g., ticket history).
+- Minimize logic in controllers; delegate to services.
+
+---
+
+## 🔌 Stripe Integration
+
+- Use `StripeService` to create payment intents or sessions.
+- Listen to `checkout.session.completed` events via webhooks.
+- Store ticket records upon successful webhook confirmation.
+
+---

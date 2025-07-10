@@ -1,0 +1,26 @@
+{
+  "system": {
+    "concert": "Konser",
+    "theater": "Tiyatro",
+    "sport": "Spor",
+    "conference": "Konferans",
+    "festival": "Festival",
+    "workshop": "Atölye",
+    "exhibition": "Sergi",
+    "seminar": "Seminer"
+  },
+  "messages": {
+    "created": "Kategori başarıyla oluşturuldu",
+    "updated": "Kategori başarıyla güncellendi",
+    "deleted": "Kategori başarıyla silindi",
+    "retrieved": "Kategori başarıyla getirildi",
+    "systemRetrieved": "Sistem kategorileri başarıyla getirildi",
+    "availableRetrieved": "Mevcut kategoriler başarıyla getirildi",
+    "searchCompleted": "Kategori araması tamamlandı"
+  },
+  "errors": {
+    "categoryNotFound": "Kategori bulunamadı",
+    "categoryAlreadyExists": "Bu isimde kategori zaten mevcut",
+    "systemCategoryCannotBeModified": "Sistem kategorileri değiştirilemez"
+  }
+}

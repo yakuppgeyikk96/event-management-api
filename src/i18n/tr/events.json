@@ -1,0 +1,21 @@
+{
+  "messages": {
+    "created": "Event başarıyla oluşturuldu",
+    "updated": "Event başarıyla güncellendi",
+    "deleted": "Event başarıyla silindi",
+    "retrieved": "Event başarıyla getirildi",
+    "publicEventsRetrieved": "Public eventler başarıyla getirildi",
+    "featuredEventsRetrieved": "Öne çıkan eventler başarıyla getirildi",
+    "organizerEventsRetrieved": "Organizatör eventleri başarıyla getirildi",
+    "searchCompleted": "Event araması tamamlandı",
+    "organizerSearchCompleted": "Organizatör event araması tamamlandı",
+    "statusUpdated": "Event durumu başarıyla güncellendi"
+  },
+  "errors": {
+    "eventNotFound": "Event bulunamadı",
+    "endDateMustBeAfterStartDate": "Bitiş tarihi başlangıç tarihinden sonra olmalıdır",
+    "startDateMustBeInFuture": "Başlangıç tarihi gelecekte olmalıdır",
+    "cannotChangeCompletedEvent": "Tamamlanmış event durumu değiştirilemez",
+    "cannotChangeCancelledEvent": "İptal edilmiş event durumu değiştirilemez"
+  }
+}
