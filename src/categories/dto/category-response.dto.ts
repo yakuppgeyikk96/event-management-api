@@ -2,6 +2,7 @@ export class CategoryResponseDto {
   _id: string;
   name: string;
   originalName?: string;
+  slug: string;
   description?: string;
   type: string;
   organizerId?: string;

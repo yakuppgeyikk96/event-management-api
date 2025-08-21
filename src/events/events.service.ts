@@ -34,12 +34,14 @@ import {
   SearchFilterUtil,
   SearchFilterConfig,
 } from '../common/utils/search-filter.util';
+import { CategoriesService } from '../categories/categories.service';
 
 @Injectable()
 export class EventsService {
   constructor(
     @InjectModel(Event.name) private eventModel: Model<EventDocument>,
     private i18n: I18nService,
+    private categoriesService: CategoriesService,
   ) {}
 
   async create(
@@ -48,7 +50,12 @@ export class EventsService {
   ): Promise<Event> {
     this.validateEventDates(createEventDto.startDate, createEventDto.endDate);
 
+    const category = await this.categoriesService.findOneBySlug(
+      createEventDto.category,
+    );
+
     const slug = await this.generateUniqueSlug(createEventDto.title);
+
     const { metaTitle, metaDescription } = this.generateSeoTags(
       createEventDto.title,
       createEventDto.description,
@@ -57,7 +64,7 @@ export class EventsService {
     const event = new this.eventModel({
       ...createEventDto,
       slug,
-      categoryId: new Types.ObjectId(createEventDto.categoryId),
+      categoryId: category._id,
       organizerId: new Types.ObjectId(organizerId),
       startDate: new Date(createEventDto.startDate),
       endDate: new Date(createEventDto.endDate),
@@ -99,12 +106,25 @@ export class EventsService {
       startDate: { $gte: new Date() },
     };
 
+    if (searchDto.category) {
+      try {
+        const category = await this.categoriesService.findOneBySlug(
+          searchDto.category,
+        );
+        query.categoryId = category._id;
+      } catch {
+        return { events: [], total: 0 };
+      }
+    }
+
+    const searchDtoWithoutCategory = { ...searchDto };
+    delete searchDtoWithoutCategory.category;
+
     const searchConfig: SearchFilterConfig = {
       textFields: ['title', 'description', 'tags'],
       exactFields: ['status'],
       dateFields: ['startDate', 'endDate'],
       numberFields: ['minPrice', 'maxPrice'],
-      objectIdFields: ['categoryId'],
       nestedFields: {
         city: 'location.city',
         minPrice: 'pricing.price',
@@ -113,7 +133,11 @@ export class EventsService {
       defaultSort: { field: 'startDate', order: 1 },
     };
 
-    SearchFilterUtil.addSearchFilters(query, searchDto, searchConfig);
+    SearchFilterUtil.addSearchFilters(
+      query,
+      searchDtoWithoutCategory,
+      searchConfig,
+    );
 
     const sort = SearchFilterUtil.buildSortQuery(searchDto, searchConfig);
 
@@ -122,8 +146,8 @@ export class EventsService {
     const [events, total] = await Promise.all([
       this.eventModel
         .find(query)
-        .populate('categoryId', 'name type')
-        .populate('organizerId', 'name email')
+        .populate('categoryId', 'name type slug')
+        .populate('organizerId', 'firstName lastName email')
         .sort(sort)
         .skip(skip)
         .limit(limit)
@@ -236,27 +260,45 @@ export class EventsService {
       );
     }
 
-    const { metaTitle, metaDescription } = this.generateSeoTags(
-      event.title,
-      updateEventDto.description || event.description,
-    );
+    const updateData: Partial<Event> = {};
+
+    if (updateEventDto.description)
+      updateData.description = updateEventDto.description;
+    if (updateEventDto.startDate)
+      updateData.startDate = new Date(updateEventDto.startDate);
+    if (updateEventDto.endDate)
+      updateData.endDate = new Date(updateEventDto.endDate);
+    if (updateEventDto.location) updateData.location = updateEventDto.location;
+    if (updateEventDto.capacity) updateData.capacity = updateEventDto.capacity;
+    if (updateEventDto.pricing) {
+      updateData.pricing = {
+        ...updateEventDto.pricing,
+        currency: updateEventDto.pricing.currency || 'TRY',
+      };
+    }
+    if (updateEventDto.tags) updateData.tags = updateEventDto.tags;
+    if (updateEventDto.isFeatured !== undefined)
+      updateData.isFeatured = updateEventDto.isFeatured;
+
+    if (updateEventDto.category) {
+      const category = await this.categoriesService.findOneBySlug(
+        updateEventDto.category,
+      );
+      updateData.categoryId = category._id;
+    }
+
+    if (updateEventDto.description) {
+      const { metaTitle, metaDescription } = this.generateSeoTags(
+        event.title,
+        updateEventDto.description,
+      );
+      updateData.metaTitle = metaTitle;
+      updateData.metaDescription = metaDescription;
+    }
 
     const updatedEvent = await this.eventModel.findByIdAndUpdate(
       id,
-      {
-        ...updateEventDto,
-        ...(updateEventDto.categoryId && {
-          categoryId: new Types.ObjectId(updateEventDto.categoryId),
-        }),
-        ...(updateEventDto.startDate && {
-          startDate: new Date(updateEventDto.startDate),
-        }),
-        ...(updateEventDto.endDate && {
-          endDate: new Date(updateEventDto.endDate),
-        }),
-        metaTitle,
-        metaDescription,
-      },
+      updateData,
       { new: true },
     );
 

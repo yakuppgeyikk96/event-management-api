@@ -6,7 +6,6 @@ import {
   IsArray,
   IsOptional,
   Min,
-  IsMongoId,
   ValidateNested,
   IsEnum,
 } from 'class-validator';
@@ -59,8 +58,9 @@ export class CreateEventDto {
   @Type(() => LocationDto)
   location: LocationDto;
 
-  @IsMongoId()
-  categoryId: string;
+  @IsString()
+  @IsNotEmpty()
+  category: string;
 
   @IsNumber()
   @Min(1)

@@ -38,6 +38,7 @@ export class EventsController {
   async findAllPublic(
     @Query() searchDto: EventSearchDto,
   ): Promise<ApiResponse<{ events: EventResponseDto[]; total: number }>> {
+    console.log('searchDto', searchDto);
     const result = await this.eventsService.findAllPublic(searchDto);
 
     const message = this.i18n.t('events.messages.publicEventsRetrieved');

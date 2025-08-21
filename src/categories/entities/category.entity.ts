@@ -21,6 +21,11 @@ export interface CategoryFindSystemQuery {
   isActive: boolean;
 }
 
+export interface CategoryFindBySlugQuery {
+  slug: string;
+  isActive: boolean;
+}
+
 export interface CategorySearchQuery {
   $or: Array<
     | {
@@ -43,6 +48,9 @@ export class Category {
 
   @Prop({ required: true, trim: true })
   name: string;
+
+  @Prop({ required: true, unique: true, trim: true })
+  slug: string;
 
   @Prop({ trim: true })
   description?: string;
@@ -69,3 +77,4 @@ CategorySchema.index({ organizerId: 1 });
 CategorySchema.index({ name: 1, type: 1 });
 CategorySchema.index({ isActive: 1 });
 CategorySchema.index({ name: 'text', description: 'text' });
+CategorySchema.index({ slug: 1 }, { unique: true });

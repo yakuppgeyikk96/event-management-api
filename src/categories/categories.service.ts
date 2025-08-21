@@ -12,6 +12,7 @@ import {
   CategoryFindByOrganizerQuery,
   CategoryFindOneQuery,
   CategoryFindSystemQuery,
+  CategoryFindBySlugQuery,
   CategoryType,
 } from './entities/category.entity';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -24,6 +25,7 @@ import {
   SearchFilterUtil,
   SearchFilterConfig,
 } from '../common/utils/search-filter.util';
+import { generateSlug, generateUniqueSlug } from '../common/utils/slug.util';
 
 @Injectable()
 export class CategoriesService {
@@ -51,8 +53,10 @@ export class CategoriesService {
       });
 
       if (!existing) {
+        const slug = await this.generateUniqueSlug(category.key);
         await this.categoryModel.create({
           name: category.key,
+          slug,
           type: CategoryType.SYSTEM,
         });
       }
@@ -114,8 +118,11 @@ export class CategoriesService {
       throw new ConflictException(errorMessage);
     }
 
+    const slug = await this.generateUniqueSlug(createCategoryDto.name);
+
     const category = new this.categoryModel({
       ...createCategoryDto,
+      slug,
       organizerId: new Types.ObjectId(organizerId),
       type: CategoryType.CUSTOM,
     });
@@ -192,6 +199,22 @@ export class CategoriesService {
     return category;
   }
 
+  async findOneBySlug(slug: string): Promise<Category> {
+    const query: CategoryFindBySlugQuery = {
+      slug,
+      isActive: true,
+    };
+
+    const category = await this.categoryModel.findOne(query);
+
+    if (!category) {
+      const errorMessage = this.i18n.t('categories.errors.categoryNotFound');
+      throw new NotFoundException(errorMessage);
+    }
+
+    return category;
+  }
+
   async update(
     id: string,
     updateCategoryDto: UpdateCategoryDto,
@@ -219,6 +242,22 @@ export class CategoriesService {
         );
         throw new ConflictException(errorMessage);
       }
+
+      const newSlug = await this.generateUniqueSlug(updateCategoryDto.name);
+      const updateData = { ...updateCategoryDto, slug: newSlug };
+
+      const updatedCategory = await this.categoryModel.findByIdAndUpdate(
+        id,
+        updateData,
+        { new: true },
+      );
+
+      if (!updatedCategory) {
+        const errorMessage = this.i18n.t('categories.errors.categoryNotFound');
+        throw new NotFoundException(errorMessage);
+      }
+
+      return updatedCategory;
     }
 
     const updatedCategory = await this.categoryModel.findByIdAndUpdate(
@@ -280,5 +319,15 @@ export class CategoriesService {
         }
       }),
     );
+  }
+
+  private async generateUniqueSlug(name: string): Promise<string> {
+    const baseSlug = generateSlug(name);
+    const existingSlugs = await this.categoryModel
+      .find({}, { slug: 1 })
+      .lean()
+      .exec();
+    const existingSlugValues = existingSlugs.map((c) => c.slug);
+    return generateUniqueSlug(baseSlug, existingSlugValues);
   }
 }

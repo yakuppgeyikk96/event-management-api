@@ -6,7 +6,7 @@ import { BaseSearchDto } from '../../common/interfaces/base-search.interface';
 export class EventSearchDto extends BaseSearchDto {
   @IsString()
   @IsOptional()
-  categoryId?: string;
+  category?: string;
 
   @IsEnum(EventStatus)
   @IsOptional()

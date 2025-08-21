@@ -10,7 +10,8 @@ export interface PopulatedEventDocument
   };
   organizerId: {
     _id: string;
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
   };
 }
@@ -32,7 +33,7 @@ export class EventMapper {
       },
       organizer: {
         _id: event.organizerId._id.toString(),
-        name: event.organizerId.name,
+        name: `${event.organizerId.firstName} ${event.organizerId.lastName}`,
         email: event.organizerId.email,
       },
       status: event.status,

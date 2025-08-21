@@ -24,13 +24,35 @@ import { I18nService } from 'nestjs-i18n';
 import { CategorySearchDto } from './dto/category-search.dto';
 
 @Controller('categories')
-@UseGuards(JwtAuthGuard)
 export class CategoriesController {
   constructor(
     private readonly categoriesService: CategoriesService,
     private readonly i18n: I18nService,
   ) {}
 
+  @Get('system')
+  async findAllSystem(
+    @Query('lang') lang?: string,
+  ): Promise<ApiResponse<CategoryResponseDto[]>> {
+    const categories = await this.categoriesService.findAllSystem(lang);
+
+    const message = this.i18n.t('categories.messages.systemRetrieved');
+    return ApiResponse.success(categories, message);
+  }
+
+  @Get('slug/:slug')
+  async findOneBySlug(
+    @Param('slug') slug: string,
+  ): Promise<ApiResponse<CategoryResponseDto>> {
+    const category = await this.categoriesService.findOneBySlug(slug);
+
+    const categoryResponse = CategoryMapper.toResponseDto(category);
+
+    const message = this.i18n.t('categories.messages.retrieved');
+    return ApiResponse.success(categoryResponse, message);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('search')
   async searchCategories(
     @Request() req: AuthenticatedRequest,
@@ -45,6 +67,7 @@ export class CategoriesController {
     return ApiResponse.success(categories, message);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(
@@ -60,6 +83,7 @@ export class CategoriesController {
     return ApiResponse.success(CategoryMapper.toResponseDto(category), message);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   async findAll(
     @Request() req: AuthenticatedRequest,
@@ -74,16 +98,7 @@ export class CategoriesController {
     return ApiResponse.success(categories, message);
   }
 
-  @Get('system')
-  async findAllSystem(
-    @Query('lang') lang?: string,
-  ): Promise<ApiResponse<CategoryResponseDto[]>> {
-    const categories = await this.categoriesService.findAllSystem(lang);
-
-    const message = this.i18n.t('categories.messages.systemRetrieved');
-    return ApiResponse.success(categories, message);
-  }
-
+  @UseGuards(JwtAuthGuard)
   @Get('available')
   async findAllAvailable(
     @Request() req: AuthenticatedRequest,
@@ -99,6 +114,7 @@ export class CategoriesController {
     return ApiResponse.success(categories, message);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(
     @Param('id') id: string,
@@ -112,6 +128,7 @@ export class CategoriesController {
     return ApiResponse.success(categoryResponse, message);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -128,6 +145,7 @@ export class CategoriesController {
     return ApiResponse.success(CategoryMapper.toResponseDto(category), message);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   async remove(

@@ -6,6 +6,7 @@ export class CategoryMapper {
     return {
       _id: category._id?.toString() ?? '',
       name: category.name,
+      slug: category.slug,
       description: category.description,
       type: category.type,
       organizerId: category.organizerId?.toString(),
@@ -28,6 +29,7 @@ export class CategoryMapper {
       _id: category._id?.toString() ?? '',
       name: translatedName,
       originalName: originalName,
+      slug: category.slug,
       description: category.description,
       type: category.type,
       organizerId: category.organizerId?.toString(),
