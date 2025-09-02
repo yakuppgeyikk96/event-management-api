@@ -38,7 +38,6 @@ export class EventsController {
   async findAllPublic(
     @Query() searchDto: EventSearchDto,
   ): Promise<ApiResponse<{ events: EventResponseDto[]; total: number }>> {
-    console.log('searchDto', searchDto);
     const result = await this.eventsService.findAllPublic(searchDto);
 
     const message = this.i18n.t('events.messages.publicEventsRetrieved');
@@ -69,6 +68,17 @@ export class EventsController {
     return ApiResponse.success(events, message);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('my-events')
+  async findAllByOrganizer(
+    @Request() req: AuthenticatedRequest,
+  ): Promise<ApiResponse<EventResponseDto[]>> {
+    const events = await this.eventsService.findAllByOrganizer(req.user._id);
+
+    const message = this.i18n.t('events.messages.organizerEventsRetrieved');
+    return ApiResponse.success(events, message);
+  }
+
   @Get(':slug')
   async findOneBySlug(
     @Param('slug') slug: string,
@@ -93,17 +103,6 @@ export class EventsController {
       EventMapper.toResponseDto(event as unknown as PopulatedEventDocument),
       message,
     );
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('organizer/events')
-  async findAllByOrganizer(
-    @Request() req: AuthenticatedRequest,
-  ): Promise<ApiResponse<EventResponseDto[]>> {
-    const events = await this.eventsService.findAllByOrganizer(req.user._id);
-
-    const message = this.i18n.t('events.messages.organizerEventsRetrieved');
-    return ApiResponse.success(events, message);
   }
 
   @UseGuards(JwtAuthGuard)
